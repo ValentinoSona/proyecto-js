@@ -1,19 +1,7 @@
-//Mensaje de bienvenida
-
-let nombre= prompt("ingrese su nombre");
-
-alert("Bienvenido " + nombre + ", a la tienda de SneakerT👟, porfavor seleccione la silueta que desea adquirir. Cualquier compra mayor a $65.000 tendra un descuento del 10%");
-
-//Variables
-
-let sneaker=0;
+/* //Variables
 let totalFinal=0;
-const carrito =[]
-
 //Funciones
-function elegirSneaker() {
-    sneaker = parseInt(prompt("ingrese el numero del sneaker que desea comprar: /N 1- Retro 1 $42.000/N 2- NikeSB low $12.000/N 3- Air force 1 $25.000/N 4- Retro 3 $55.000/N 5- Listo"));
-}
+
 
 function zapatilla(modelo,precio,año) {
     this.modelo=modelo;
@@ -73,14 +61,111 @@ function sumarZapatillas() {
     }
   }
 
-elegirSneaker();
 
 while (sneaker !=5){
     sumaFinal();
     elegirSneaker()
+} */
+
+// Variables
+const carrito = document.querySelector('#carrito');
+const listaZapatillas = document.querySelector('#lista-zapatillas');
+const contenedorCarrito = document.querySelector('#lista-carrito tbody');
+const vaciarCarritoBtn = document.querySelector('#vaciar-carrito'); 
+let articulosCarrito = [];
+
+
+cargarEventListeners();
+
+function cargarEventListeners() {
+     
+     listaZapatillas.addEventListener('click', agregarZapatilla);
+
+     carrito.addEventListener('click', eliminarSneaker);
+
+    
+     vaciarCarritoBtn.addEventListener('click', vaciarCarrito);
 }
 
-sumarZapatillas();
 
-console.log(carrito);
 
+function agregarZapatilla(e) {
+     e.preventDefault();
+     
+     if(e.target.classList.contains('agregar-carrito')) {
+          const sneaker = e.target.parentElement.parentElement;
+          
+     leerDatosSneaker(sneaker);
+     }
+}
+
+
+function leerDatosSneaker(sneaker) {
+     const infoSneaker = {
+          imagen: sneaker.querySelector('img').src,
+          titulo: sneaker.querySelector('h4').textContent,
+          año: sneaker.querySelector('.año').textContent,
+          precio: sneaker.querySelector('.precio').textContent,
+          id: sneaker.querySelector('a').getAttribute('data-id'), 
+          cantidad: 1
+     }
+
+
+     if( articulosCarrito.some( sneaker => sneaker.id === infoSneaker.id ) ) { 
+          const sneakers = articulosCarrito.map( sneaker => {
+               if( sneaker.id === infoSneaker.id ) {
+                    sneaker.cantidad++;
+                     return sneaker;
+                } else {
+                     return sneaker;
+             }
+          })
+          articulosCarrito = [...sneakers];
+     }  else {
+          articulosCarrito = [...articulosCarrito, infoSneaker];
+     }
+
+     console.log(articulosCarrito)
+
+
+     carritoHTML();
+}
+
+function eliminarSneaker(e) {
+     e.preventDefault();
+     if(e.target.classList.contains('borrar-sneaker') ) {
+          const sneakerId = e.target.getAttribute('data-id')
+          
+          articulosCarrito = articulosCarrito.filter(sneaker => sneaker.id !== sneakerId);
+
+          carritoHTML();
+     }
+}
+
+function carritoHTML() {
+
+     vaciarCarrito();
+
+     articulosCarrito.forEach(sneaker => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+               <td>  
+                    <img src="${sneaker.imagen}" width=100>
+               </td>
+               <td>${sneaker.titulo}</td>
+               <td>${sneaker.precio}</td>
+               <td>${sneaker.cantidad} </td>
+               <td>
+                    <a href="#" class="borrar-sneaker" data-id="${sneaker.id}">X</a>
+               </td>
+          `;
+          contenedorCarrito.appendChild(row);
+     });
+
+}
+
+function vaciarCarrito() {
+     while(contenedorCarrito.firstChild) {
+          contenedorCarrito.removeChild(contenedorCarrito.firstChild);
+      }
+}
