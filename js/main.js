@@ -85,6 +85,12 @@ function cargarEventListeners() {
 
     
      vaciarCarritoBtn.addEventListener('click', vaciarCarrito);
+
+     document.addEventListener('DOMContentLoaded', () => {
+          articulosCarrito = JSON.parse( localStorage.getItem('articulosCarrito') ) || []  ;
+          console.log(articulosCarrito);
+          carritoHTML();
+     });
 }
 
 
@@ -162,10 +168,20 @@ function carritoHTML() {
           contenedorCarrito.appendChild(row);
      });
 
+     sincronizarStorage();
 }
 
 function vaciarCarrito() {
      while(contenedorCarrito.firstChild) {
           contenedorCarrito.removeChild(contenedorCarrito.firstChild);
+          vaciarStorage();
       }
+}
+
+function sincronizarStorage() {
+     localStorage.setItem('articulosCarrito', JSON.stringify(articulosCarrito));
+}
+
+function vaciarStorage() {
+     localStorage.clear();
 }
