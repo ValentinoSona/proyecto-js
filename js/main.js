@@ -112,6 +112,9 @@ function leerDatosSneaker(sneaker) {
           titulo: sneaker.querySelector('h4').textContent,
           año: sneaker.querySelector('.año').textContent,
           precio: sneaker.querySelector('.precio').textContent,
+          /* total: ()=>{
+               
+          }, */
           id: sneaker.querySelector('a').getAttribute('data-id'), 
           cantidad: 1
      }
@@ -184,4 +187,5 @@ function sincronizarStorage() {
 
 function vaciarStorage() {
      localStorage.clear();
+     location.reload();
 }
