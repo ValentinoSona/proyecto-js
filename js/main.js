@@ -84,7 +84,7 @@ function cargarEventListeners() {
      carrito.addEventListener('click', eliminarSneaker);
 
     
-     vaciarCarritoBtn.addEventListener('click', vaciarCarrito);
+     vaciarCarritoBtn.addEventListener('click', vaciarCarritoNotificacion);
 
      document.addEventListener('DOMContentLoaded', () => {
           articulosCarrito = JSON.parse( localStorage.getItem('articulosCarrito') ) || []  ;
@@ -188,4 +188,18 @@ function sincronizarStorage() {
 function vaciarStorage() {
      localStorage.clear();
      location.reload();
+}
+
+function vaciarCarritoNotificacion(){
+     Swal.fire({
+          title: "Desea vaciar el carrito?",
+          showDenyButton:true,
+          showCancelButton:false,
+          confirmButtonText:"Si",
+          denyButtonText:"No",
+     }).then((result) =>{
+          if(result.isConfirmed){
+               vaciarCarrito()
+          }
+     })
 }
