@@ -203,3 +203,23 @@ function vaciarCarritoNotificacion(){
           }
      })
 }
+const section=document.getElementById("lista-zapatillas")
+
+fetch("./js/data.json")
+.then(response=>response.json())
+.then(data=>{
+data.forEach(post=>{
+     const div=document.createElement("div");
+     div.innerHTML=`
+    <img src="${post.imagen}">
+     <div>
+          <h4>${post.nombre}</h4>
+          <p class="año">${post.año}</p>
+          <p class="precio">${post.precio}</p>
+          <a href="#" class="agregar-carrito" data-id="${post.id}">Agregar Al Carrito</a>
+     </div>
+     
+     `;
+     section.append(div)
+});
+})
