@@ -1,0 +1,61 @@
+*{
+    margin: 0;
+    padding:0;
+}
+
+.header-css{
+    display: flex;
+    justify-content: center;
+    -webkit-box-shadow: 0px 5px 15px 5px #000000; 
+    box-shadow: 0px 5px 15px 5px #000000;
+    margin-bottom: 50px;
+}
+.header-logo{
+    display: flex;
+    justify-content: space-between;
+}
+.logo-header{
+    width: 300px;
+    margin-left: 150px;
+}
+
+.icono-header{
+    font-size: xx-large;
+    margin-right: 200px;
+}
+
+.h1-css{
+    text-align: center;
+    font-size: 28px;
+    margin: 25px 100px 100px 100px;
+}
+
+
+.div-carrito{
+    margin-right: 100px;
+}
+
+.section-cards{
+    display: flex;
+    margin: 20px;
+    justify-content: space-between;
+}
+
+.agregar-css{
+    text-decoration: none;
+    color: black;
+    border: #000000 solid 2px;
+    padding: 5px;
+}
+
+.carrito-botones{
+    text-decoration: none;
+    color: black;
+    border: red solid 2px;
+    padding: 2px;
+}
+
+.cross{
+    text-decoration: none;
+    color: black;
+}

@@ -1,19 +1,19 @@
 [{
-"imagen":"../multimedia/airforce.jpg",
+"imagen":"../multimedia/retro1.jpg",
  "nombre":"Retro 1",
  "año":2014,
  "precio":42000,
  "id":1   
 },
 {
-"imagen":"../multimedia/airforce.jpg",
+"imagen":"../multimedia/retro3.jpg",
     "nombre":"Retro 3",
     "año":2017,
     "precio":55000,
     "id":2   
    },
    {
-    "imagen":"../multimedia/airforce.jpg",
+    "imagen":"../multimedia/sb.jpg",
     "nombre":"NikeSB Low",
     "año":2004,
     "precio":12000,

@@ -1,78 +1,15 @@
-/* //Variables
-let totalFinal=0;
-//Funciones
-
-
-function zapatilla(modelo,precio,año) {
-    this.modelo=modelo;
-    this.precio=precio;
-    this.año=año;
-}
-
-const retro1= new zapatilla("Jordan Retro 1", 42000, 2014);
-const nikesb= new zapatilla("NikeSB low", 12000, 2004);
-const airforce1= new zapatilla("Air Force 1", 25000, 2010);
-const retro3= new zapatilla("Jordan Retro 3", 55000, 2017);
-
-function agregarCarrito(zapatilla) {
-    carrito.push(zapatilla)
-}
-
-function sumaFinal() {
-    switch (sneaker) {
-        case 1:
-            alert("Usted selecciono las Jordan Retro 1, se sumara el valor de $42.000 a su compra");
-            totalFinal += retro1.precio;
-            agregarCarrito(retro1)
-            break;
-        case 2: 
-            alert("Usted selecciono las NikeSB low, se sumara el valor de $12.000 a su compra");
-            totalFinal += nikesb.precio;
-            agregarCarrito(nikesb)
-            break;
-        case 3:
-            alert("Usted selecciono las Air Force 1, se sumara el valor de $25.000 a su compra");
-            totalFinal += airforce1.precio;
-            agregarCarrito(airforce1)
-            break;
-        case 4:
-            alert("Usted selecciono las Jordan Retro 3, se sumara el valor de $55.000 a su compra");
-            totalFinal += retro3.precio;
-            agregarCarrito(retro3)
-        default:
-            alert("Opcion no valida, porfavor ingrese un numero del 1-4 para poder seguir con su compra");
-            break;
-    }
-    alert("su total hasta el momento es de: $" + totalFinal);
-    return totalFinal;
-}
-
-function sumarZapatillas() {
-    const total = carrito.reduce(
-      (acc, el) => (acc += el.precio),0
-    );
-    const descuento = total - total * 0.1;
-    if (total > 65000) {
-        alert("Usted realizo una compra mayor a $65.000, por lo que tiene un descuento del 10% y debe pagar $"+ descuento);
-        console.log("Usted realizo una compra mayor a $65.000, por lo que tiene un descuento del 10% y debe pagar $"+ descuento);
-    } else {
-        alert("Su total final es de: $", total);
-        console.log("Su total final es de: $", total);
-    }
-  }
-
-
-while (sneaker !=5){
-    sumaFinal();
-    elegirSneaker()
-} */
 
 // Variables
 const carrito = document.querySelector('#carrito');
 const listaZapatillas = document.querySelector('#lista-zapatillas');
 const contenedorCarrito = document.querySelector('#lista-carrito tbody');
 const vaciarCarritoBtn = document.querySelector('#vaciar-carrito'); 
+const comprarBtn= document.querySelector("#compra")
 let articulosCarrito = [];
+let totalCarrito=0;
+let inicio= 100;
+let fin=999;
+let numeroRandom= inicio+ Math.floor(Math.random()*fin);
 
 
 cargarEventListeners();
@@ -83,7 +20,8 @@ function cargarEventListeners() {
 
      carrito.addEventListener('click', eliminarSneaker);
 
-    
+     comprarBtn.addEventListener('click', finalizarCompra);
+
      vaciarCarritoBtn.addEventListener('click', vaciarCarritoNotificacion);
 
      document.addEventListener('DOMContentLoaded', () => {
@@ -93,6 +31,9 @@ function cargarEventListeners() {
      });
 }
 
+function calcularTotalCarrito() {
+     totalCarrito = articulosCarrito.reduce((anterior, articulo) => { return anterior + (articulo.precio * articulo.cantidad) }, 0);
+}
 
 
 function agregarZapatilla(e) {
@@ -112,9 +53,6 @@ function leerDatosSneaker(sneaker) {
           titulo: sneaker.querySelector('h4').textContent,
           año: sneaker.querySelector('.año').textContent,
           precio: sneaker.querySelector('.precio').textContent,
-          /* total: ()=>{
-               
-          }, */
           id: sneaker.querySelector('a').getAttribute('data-id'), 
           cantidad: 1
      }
@@ -162,14 +100,16 @@ function carritoHTML() {
                     <img src="${sneaker.imagen}" width=100>
                </td>
                <td>${sneaker.titulo}</td>
-               <td>${sneaker.precio}</td>
+               <td>${sneaker.precio*sneaker.cantidad}</td>
                <td>${sneaker.cantidad} </td>
                <td>
-                    <a href="#" class="borrar-sneaker" data-id="${sneaker.id}">X</a>
+                    <a href="#" class="borrar-sneaker cross" data-id="${sneaker.id}">X</a>
                </td>
           `;
           contenedorCarrito.appendChild(row);
      });
+
+     document.querySelector('#total-carrito').innerHTML = '$' + totalCarrito;
 
      sincronizarStorage();
 }
@@ -179,6 +119,8 @@ function vaciarCarrito() {
           contenedorCarrito.removeChild(contenedorCarrito.firstChild);
           vaciarStorage();
       }
+
+      calcularTotalCarrito();
 }
 
 function sincronizarStorage() {
@@ -203,6 +145,32 @@ function vaciarCarritoNotificacion(){
           }
      })
 }
+
+function finalizarCompra(){
+     Swal.fire({
+          title:"Desea finalizar la compra? Se le asignara un numero de pedido para retirar en el local",
+          showDenyButton:true,
+          showCancelButton:false,
+          confirmButtonText:"Si",
+          denyButtonText:"No",
+     }).then((result)=>{
+          if(result.isConfirmed){
+               Swal.fire({
+                    title:"Muchas Gracias!",
+                    text:"Su numero de pedido es: N°" + numeroRandom,
+                    showCancelButton: true,
+                    confirmBUttonColor:"#3085d6",
+                    cancelButtonColor:"#d33",
+                    confirmButtonText:"Finalizar"
+               }).then((result)=>{
+                    if (result.isConfirmed){
+                         vaciarCarrito()
+                    }
+               })
+          }
+     })
+}
+
 const section=document.getElementById("lista-zapatillas")
 
 fetch("./js/data.json")
@@ -211,15 +179,18 @@ fetch("./js/data.json")
 data.forEach(post=>{
      const div=document.createElement("div");
      div.innerHTML=`
-    <img src="${post.imagen}">
-     <div>
-          <h4>${post.nombre}</h4>
-          <p class="año">${post.año}</p>
-          <p class="precio">${post.precio}</p>
-          <a href="#" class="agregar-carrito" data-id="${post.id}">Agregar Al Carrito</a>
+     <div class="card" style="width: 18rem;">
+     <img src="${post.imagen}"  class="card-img-top" alt="...">
+     <div class="card-body">
+        <h4>${post.nombre}</h4>
+       <p class="card-text año">${post.año}</p>
+       <p class="card-text precio">${post.precio}</p>
+       <a href="#" class="agregar-carrito agregar-css" data-id="${post.id}">Agregar Al Carrito</a>
      </div>
+   </div>
      
      `;
      section.append(div)
 });
 })
+
